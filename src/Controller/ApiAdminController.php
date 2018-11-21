@@ -1,20 +1,20 @@
 <?php
 
-namespace App\Api\Controller;
+namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
-class ApiCustomerController extends AbstractController
+class ApiAdminController extends AbstractController
 {
     /**
-     * @Route("/api/customer", name="api_customer")
+     * @Route("/api/admin/products", name="api_admin")
      */
     public function index()
     {
         return $this->json([
             'message' => 'Welcome to your new controller!',
-            'path' => 'src/Controller/ApiCustomerController.php',
+            'path' => 'src/Controller/ApiAdminController.php',
         ]);
     }
 }
