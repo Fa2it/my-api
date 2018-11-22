@@ -1,4 +1,8 @@
 <?php
+/**
+ * @author Felix Ashu Aba
+ * @author-url https://www.fa2.it/about/
+ */
 
 namespace App\Controller;
 use App\Controller\BaseController;
@@ -47,20 +51,28 @@ class ApiAdminController extends BaseController
 
       if( $this->islogin( $auth[0], $auth[1] ) && $this->isAdmin() ){
           $product = null;
+          $msg = $resmsg = [];
           $id = @$data['id'];
           $entityManager = $this->getDoctrine()->getManager();
           if( $id ){
-              $product =   $this->getDoctrine()->getRepository(Product::class)->findOneBy( ['id' => $id ] ) ;
+              $product =   $this->getDoctrine()->getRepository(Product::class)->find( $id ) ;
+              $msg = [ 'Message'=>'Product updated '];
           } else {
               $product = new Product();
+              $msg = [ 'Message'=>'A new Product is created '];
           }
 
-          $this-> set_product( $product ,  $data );
-          // tell Doctrine you want to (eventually) save the Product (no queries yet)
-          $entityManager->persist( $product );
-          // actually executes the queries (i.e. the INSERT query)
-          $entityManager->flush();
-          return $this->json(['A new Product created with id '=>$product->getId() ] );
+          if( $product ){
+            $this-> set_product( $product ,  $data );
+            // tell Doctrine you want to (eventually) save the Product (no queries yet)
+            $entityManager->persist( $product );
+            // actually executes the queries (i.e. the INSERT query)
+            $entityManager->flush();
+            $resmsg = array_merge( $msg, ['ProductId'=>$product->getId()] );
+          } else{
+            $resmsg = ['Message'=>'Error Product not found!'];
+          }
+          return $this->json( $resmsg );
       }
       return $this->json( $this->login_error_msg );
 
@@ -69,7 +81,7 @@ class ApiAdminController extends BaseController
     private function get_products( $id=0 ){
       $products = null;
       if( $id > 0 ){
-          $products =   $this->getDoctrine()->getRepository(Product::class)->findOneBy( ['id' => $id ] ) ;
+          $products =   $this->getDoctrine()->getRepository(Product::class)->find( $id ) ;
       } else {
           $products =   $this->getDoctrine()->getRepository(Product::class)->findAll();
       }

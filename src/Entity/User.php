@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * @author Felix Ashu Aba
+ * @author-url https://www.fa2.it/about/
+ */
+ 
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;

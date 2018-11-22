@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * @author Felix Ashu Aba
+ * @author-url https://www.fa2.it/about/
+ */
+ 
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -168,7 +172,7 @@ class Product
     }
     public function getDiscount(): ?string
     {
-        return $this->$discount;
+        return $this->discount;
     }
 
     public function setDiscount(?string $discount): self
