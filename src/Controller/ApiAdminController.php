@@ -52,10 +52,9 @@ class ApiAdminController extends BaseController
       if( $this->islogin( $auth[0], $auth[1] ) && $this->isAdmin() ){
           $product = null;
           $msg = $resmsg = [];
-          $id = @$data['id'];
           $entityManager = $this->getDoctrine()->getManager();
-          if( $id ){
-              $product =   $this->getDoctrine()->getRepository(Product::class)->find( $id ) ;
+          if( @$data['id'] ){
+              $product =   $this->getDoctrine()->getRepository(Product::class)->find( @$data['id'] ) ;
               $msg = [ 'Message'=>'Product updated '];
           } else {
               $product = new Product();
@@ -63,7 +62,7 @@ class ApiAdminController extends BaseController
           }
 
           if( $product ){
-            $this-> set_product( $product ,  $data );
+            $product->setProduct( $data );
             // tell Doctrine you want to (eventually) save the Product (no queries yet)
             $entityManager->persist( $product );
             // actually executes the queries (i.e. the INSERT query)
@@ -87,67 +86,12 @@ class ApiAdminController extends BaseController
       }
       if( count( $products ) > 1 ){
           return array_map(function( $product ){
-            return  $this->serialize_product( $product );
+            return  $product->serializeProduct();
           }, $products );
       } elseif( $products ){
-        return $this->serialize_product( $products );
+        return $products->serializeProduct();
       }
       return $products;
-    }
-
-    private function serialize_product(Product $product ){
-       return [
-          'id'=>$product->getId(),
-          'name'=>$product->getName(),
-          'supplier_id'=>$product->getSupplierId(),
-          'category_id'=>$product->getCategoryId(),
-          'description'=>$product->getDescription(),
-          'unit_price'=>$product->getUnitPrice(),
-          'creation_date'=>$product->getCreationDate(),
-          'last_modified_date'=>$product->getLastModifiedDate(),
-          'group_list'=>$product->getGroupList(),
-          'discount' =>$product->getDiscount(),
-          'discount_price' =>$product->getDiscountPrice()
-       ];
-
-    }
-
-    private function set_product(Product $product , array $data ){
-            if( isset( $data['name'] ) ){
-              $product->setName( @$data['name'] );
-            }
-            if( isset( $data['supplier_id'] ) ){
-              $product->setSupplierId( @$data['supplier_id'] );
-            }
-
-            if( isset( $data['category_id'] ) ){
-              $product->setCategoryId( @$data['category_id'] );
-            }
-            if( isset( $data['description'] ) ){
-              $product->setDescription( @$data['description'] );
-            }
-            if( isset( $data['unit_price'] ) ){
-              $product->setUnitPrice( @$data['unit_price'] );
-            }
-
-            if( isset( $data['creation_date'] ) ){
-              $product->setCreationDate( @$data['creation_date'] );
-            }
-            if( isset( $data['last_modified_date'] ) ){
-              $product->setLastModifiedDate( @$data['last_modified_date']);
-            }
-            if( isset( $data['group_list'] ) ){
-              // TODO if id, make sure elemets of group list are found in
-              // otherwise throw and error product
-              $product->setGroupList( @$data['group_list'] );
-            }
-            if( isset( $data['discount'] ) ){
-              $product->setDiscount( @$data['discount'] );
-            }
-            if( isset( $data['unit_price'],  $data['discount'] ) ){
-              $product->setDiscountPrice( $data['unit_price'],  $data['discount'] );
-            }
-
     }
 
 

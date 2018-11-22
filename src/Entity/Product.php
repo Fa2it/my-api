@@ -3,7 +3,7 @@
  * @author Felix Ashu Aba
  * @author-url https://www.fa2.it/about/
  */
- 
+
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -199,6 +199,59 @@ class Product
         return $this;
     }
 
+    public function serializeProduct(){
+       return [
+          'id'=>$this->getId(),
+          'name'=>$this->getName(),
+          'supplier_id'=>$this->getSupplierId(),
+          'category_id'=>$this->getCategoryId(),
+          'description'=>$this->getDescription(),
+          'unit_price'=>$this->getUnitPrice(),
+          'creation_date'=>$this->getCreationDate(),
+          'last_modified_date'=>$this->getLastModifiedDate(),
+          'group_list'=>$this->getGroupList(),
+          'discount' =>$this->getDiscount(),
+          'discount_price' =>$this->getDiscountPrice()
+       ];
 
+    }
+
+    public function setProduct( array $data ){
+            if( isset( $data['name'] ) ){
+              $this->setName( @$data['name'] );
+            }
+            if( isset( $data['supplier_id'] ) ){
+              $this->setSupplierId( @$data['supplier_id'] );
+            }
+
+            if( isset( $data['category_id'] ) ){
+              $this->setCategoryId( @$data['category_id'] );
+            }
+            if( isset( $data['description'] ) ){
+              $this->setDescription( @$data['description'] );
+            }
+            if( isset( $data['unit_price'] ) ){
+              $this->setUnitPrice( @$data['unit_price'] );
+            }
+
+            if( isset( $data['creation_date'] ) ){
+              $this->setCreationDate( @$data['creation_date'] );
+            }
+            if( isset( $data['last_modified_date'] ) ){
+              $this->setLastModifiedDate( @$data['last_modified_date']);
+            }
+            if( isset( $data['group_list'] ) ){
+              // TODO if id, make sure elemets of group list are found in
+              // otherwise throw and error product
+              $this->setGroupList( @$data['group_list'] );
+            }
+            if( isset( $data['discount'] ) ){
+              $this->setDiscount( @$data['discount'] );
+            }
+            if( isset( $data['unit_price'],  $data['discount'] ) ){
+              $this->setDiscountPrice( $data['unit_price'],  $data['discount'] );
+            }
+            return $this;
+    }
 
 }
