@@ -3,7 +3,7 @@
  * @author Felix Ashu Aba
  * @author-url https://www.fa2.it/about/
  */
- 
+
 namespace App\Controller;
 
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -11,6 +11,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use App\Entity\User;
+use App\Entity\Product;
 
 class BaseController extends AbstractController
 {
@@ -42,6 +43,10 @@ class BaseController extends AbstractController
         return false;
     }
 
+    public function getUser(){
+      return $this->_user;
+    }
+
     /**
      * @Route("/api/test/adminlogin", name="test_adminlogin")
      */
@@ -49,10 +54,10 @@ class BaseController extends AbstractController
        $auth = $request->request->get('auth');
        if( count($auth) > 1 ){
            if( $this->islogin( $auth[0] , $auth[1] ) ){
-              return $this->json( ['Admin log in is true'=> $this->isAdmin() ] );
+              return $this->json( ['isAdminLogin'=> $this->isAdmin() ] );
            }
        }
-       return $this->json( ['Admin log in Error'=> "Error" ] );
+       return $this->json( ['isAdminLogin'=> "Error" ] );
      }
 
      /**
@@ -62,11 +67,27 @@ class BaseController extends AbstractController
        $auth = $request->request->get('auth');
        if( count($auth) > 1 ){
            if( $this->islogin( $auth[0] , $auth[1] ) ){
-              return $this->json( ['Customer log in is true'=> $this->isCustomer() ] );
+              return $this->json( ['isLogin'=> $this->isCustomer() ] );
            }
        }
-       return $this->json( ['Customer  log in Error'=> "Error" ] );
+       return $this->json( ['isLogin'=> "Error" ] );
      }
 
+     protected function get_products( $id=0 ){
+       $products = null;
+       if( $id > 0 ){
+           $products =   $this->getDoctrine()->getRepository(Product::class)->find( $id ) ;
+       } else {
+           $products =   $this->getDoctrine()->getRepository(Product::class)->findAll();
+       }
+       if( count( $products ) > 1 ){
+           return array_map(function( $product ){
+             return  $product->serializeProduct();
+           }, $products );
+       } elseif( $products ){
+         return $products->serializeProduct();
+       }
+       return $products;
+     }
 
 }

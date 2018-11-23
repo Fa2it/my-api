@@ -3,8 +3,9 @@
  * @author Felix Ashu Aba
  * @author-url https://www.fa2.it/about/
  */
- 
+
   require_once( "vendor/autoload.php" );
+    require_once( __DIR__."/testFunction.php" );
 
   // Create a client with a base URI
   $client = new GuzzleHttp\Client( ['base_uri' => 'http://localhost:8000/api/test/'] );
@@ -20,11 +21,10 @@ $data =[
   ];
 
 $response = $client->request('POST', 'adminlogin', $data );
-
-$body = $response->getBody();
-// Implicitly cast the body to a string and echo it
-echo $body;
-echo "\n\n";
+$res = json_decode( $response->getBody() );
+echo "Testing for Admin Login: ";
+compareEquals( $res->isAdminLogin, 1 );
+echo "\n----------------\n";
 
 
 /* Testing islogin and
@@ -38,8 +38,6 @@ $data =[
 ];
 
 $response = $client->request('POST', 'customerlogin', $data );
-
-$body = $response->getBody();
-// Implicitly cast the body to a string and echo it
-echo $body;
-echo "\n\n";
+$res = json_decode( $response->getBody() );
+echo "Testing for User/customer Login: ";
+compareEquals( $res->isLogin, 1 );

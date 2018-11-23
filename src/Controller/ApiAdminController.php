@@ -77,23 +77,6 @@ class ApiAdminController extends BaseController
 
     }
 
-    private function get_products( $id=0 ){
-      $products = null;
-      if( $id > 0 ){
-          $products =   $this->getDoctrine()->getRepository(Product::class)->find( $id ) ;
-      } else {
-          $products =   $this->getDoctrine()->getRepository(Product::class)->findAll();
-      }
-      if( count( $products ) > 1 ){
-          return array_map(function( $product ){
-            return  $product->serializeProduct();
-          }, $products );
-      } elseif( $products ){
-        return $products->serializeProduct();
-      }
-      return $products;
-    }
-
 
 
 }
