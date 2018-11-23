@@ -1,7 +1,17 @@
-# my_api
+# my_api Usage:
 Simple symphony api app
-
-
+	1. git clone https://github.com/Fa2it/my_api.git
+	2. cd into my_api/
+	3. run composer update
+	3. import "api.sql" file found in "public/"  folder
+	4. set up database login in the ".env" file 
+    5. run the development server: php bin/console server:run 
+	6. Test script:
+		a.  php tests/api/baseControllerTest.php
+		b.  php tests/api/baseControllerTest.php
+		c.  php tests/api/baseControllerTest.php
+		
+# Task
 Build a set of REST interfaces (no visual interfaces are needed) that allow us to do the following:
 
 Manage a list of products that have prices.
