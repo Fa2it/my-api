@@ -41,3 +41,4 @@ $response = $client->request('POST', 'customerlogin', $data );
 $res = json_decode( $response->getBody() );
 echo "Testing for User/customer Login: ";
 compareEquals( $res->isLogin, 1 );
+echo "\n----------------\n";
