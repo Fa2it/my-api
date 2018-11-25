@@ -45,16 +45,13 @@ class ApiCustomerController extends BaseController
     $data = $request->request->get('data');
      if( $this->islogin( $auth[0], $auth[1] ) && $this->isCustomer() ){
         // process order subtotal.
-        $st_p = array_map ( function( $item ){
-                  $res['sub_total'] = $item['quantity'] * $item['unit_price'];
+        $t['order'] = array_map ( function( $item ){
+                  $price = ( isset( $item['discount_price'] ) ) ? $item['discount_price'] : $item['unit_price'] ;
+                  $res['sub_total'] = $item['quantity'] * $price;
                   return array_merge($item, $res );
         } , $data );
-
         // process order Total.
-        $t_p = array_map ( function( $item ){  return  $item['sub_total'];  } , $st_p );
-
-        $t['total'] = array_sum( $t_p );
-        $t['order'] = $st_p;
+        $t['total'] = array_sum( array_map ( function( $item ){ return $item['sub_total']; }, $t['order'] ) );
 
         return $this->json( $t );
      }

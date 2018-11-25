@@ -86,7 +86,7 @@
 
   $response = $client->request( 'POST', 'product/create', $data );
   $res = json_decode( $response->getBody() );
-  echo "Testing for setting discount by value: ";
+  echo "Testing for setting discount by percentage%: ";
   compareEquals( $res->ProductId, 127 );
   echo "\n";
   $response = $client->request( 'GET', 'product/127/Admin/Admin' );

@@ -36,9 +36,11 @@ class BaseController extends AbstractController
       //READ
 		    $user =   $this->getDoctrine()->getRepository(User::class)->findOneBy( ['name' => $username ] ) ;
         if( $user ){
-          if( password_verify( $password, $user->getPassword() ) )
+            if( password_verify( $password, $user->getPassword() ) ){
               $this->_user = $user;
               return true;
+            }
+
         }
         return false;
     }

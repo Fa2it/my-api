@@ -53,6 +53,6 @@
    echo "\nTesting for sub total ". $res->order[2]->product_id .": ";
    compareEquals( $res->order[2]->sub_total, 100 );
 
-   echo "\nTesting for total for Order:   ";
+   echo "\nTesting for total for Order: ";
    compareEquals( $res->total, 2200 );
    echo "\n----------------\n";
