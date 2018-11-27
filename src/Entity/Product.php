@@ -199,7 +199,8 @@ class Product
         return $this;
     }
 
-    public function serializeProduct(){
+    public function serializeProduct(): array
+    {
        return [
           'id'=>$this->getId(),
           'name'=>$this->getName(),
@@ -216,7 +217,8 @@ class Product
 
     }
 
-    public function setProduct( array $data ){
+    public function setProduct( array $data ): self
+    {
             if( isset( $data['name'] ) ){
               $this->setName( @$data['name'] );
             }
