@@ -56,7 +56,7 @@ class ApiCustomerController extends BaseController
 
             return $this->json( $t );
         }
-        return $this->json( ['error'=>'array is empty'] ); 
+        return $this->json( ['error'=>'array is empty'] );
      }
      return $this->json( $this->login_error_msg );
 

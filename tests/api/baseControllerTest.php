@@ -4,41 +4,52 @@
  * @author-url https://www.fa2.it/about/
  */
 
-  require_once( "vendor/autoload.php" );
-    require_once( __DIR__."/testFunction.php" );
 
-  // Create a client with a base URI
-  $client = new GuzzleHttp\Client( ['base_uri' => 'http://localhost:8000/api/test/'] );
-
-  /* Testing islogin and
-  * And getting a Response
- */
-
-$data =[
-      'form_params' => [
-        'auth' => ['Admin', 'Admin'],
-      ]
-  ];
-
-$response = $client->request('POST', 'adminlogin', $data );
-$res = json_decode( $response->getBody() );
-echo "Testing for Admin Login: ";
-compareEquals( $res->isAdminLogin, 1 );
-echo "\n----------------\n";
+  use GuzzleHttp\Client;
+  use PHPUnit\Framework\TestCase;
 
 
-/* Testing islogin and
-* And getting a Response
-*/
+  class baseControllerTest extends TestCase{
 
-$data =[
-    'form_params' => [
-      'auth' => ['Brown Thomas', 'customer'],
-    ]
-];
+   protected $client;
 
-$response = $client->request('POST', 'customerlogin', $data );
-$res = json_decode( $response->getBody() );
-echo "Testing for User/customer Login: ";
-compareEquals( $res->isLogin, 1 );
-echo "\n----------------\n";
+   protected function setUp()
+   {
+       $this->client = new GuzzleHttp\Client( ['base_uri' => 'http://localhost:8000/api/test/'] );
+   }
+
+   protected function tearDown()
+   {
+       unset( $this->client );
+   }
+
+   public function testAdminLogin(){
+
+     $data =[
+           'form_params' => [
+             'auth' => ['Admin', 'Admin'],
+           ]
+       ];
+
+     $response = $this->client->request('POST', 'adminlogin', $data );
+     $res = json_decode( $response->getBody() );
+     // echo "\nTesting for Admin Login: \n";
+     $this->assertTrue( $res->isAdminLogin, 1 );
+
+   }
+
+   public function testCustomerLogin(){
+     $data =[
+         'form_params' => [
+           'auth' => ['Brown Thomas', 'customer'],
+         ]
+     ];
+
+     $response = $this->client->request('POST', 'customerlogin', $data );
+     $res = json_decode( $response->getBody() );
+     // echo "\n Testing for User/customer Login: \n";
+     $this->assertEquals( $res->isLogin, 1 );
+
+   }
+
+ }

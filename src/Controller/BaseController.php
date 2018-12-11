@@ -22,17 +22,17 @@ class BaseController extends AbstractController
    * Will not use session just normal login
    */
 
-    protected function isAdmin()
+    protected function isAdmin():bool
     {
         return ($this->_user != null ) ? ( $this->_user->getRole() == 'Admin' ) : false;
     }
 
-    protected function isCustomer()
+    protected function isCustomer():bool
     {
         return ($this->_user != null ) ? ( $this->_user->getRole() == 'Customer' ) : false;
     }
 
-    protected function islogin( string $username , string $password ){
+    protected function islogin( string $username , string $password ):bool {
       //READ
 		    $user =   $this->getDoctrine()->getRepository(User::class)->findOneBy( ['name' => $username ] ) ;
         if( $user ){
@@ -45,7 +45,7 @@ class BaseController extends AbstractController
         return false;
     }
 
-    public function getUser(){
+    public function getUser():User{
       return $this->_user;
     }
 
@@ -75,7 +75,7 @@ class BaseController extends AbstractController
        return $this->json( ['isLogin'=> "Error" ] );
      }
 
-     protected function get_products( $id=0 ){
+     protected function get_products(int $id=0 ):array {
        $products = null;
        if( $id > 0 ){
            $products =   $this->getDoctrine()->getRepository(Product::class)->find( $id ) ;
