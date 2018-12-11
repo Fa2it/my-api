@@ -4,13 +4,10 @@ Simple symphony api app
 2. cd into my_api/
 3. run composer update
 4. import "api.sql" file found in "public/"  folder
-5. set up database login in the ".env" file 
-6. run the development server: php bin/console server:run 
-7. Test script:
-	a.  php tests/api/baseControllerTest.php
-	b.  php tests/api/baseControllerTest.php
-	c.  php tests/api/baseControllerTest.php
-		
+5. set up database login in the ".env" file
+6. run the development server: php bin/console server:run
+7. run phpunit tests/
+
 # Task
 Build a set of REST interfaces (no visual interfaces are needed) that allow us to do the following:
 
