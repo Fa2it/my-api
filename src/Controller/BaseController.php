@@ -11,7 +11,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use App\Entity\User;
-use App\Entity\Product;
 
 class BaseController extends AbstractController
 {
@@ -75,21 +74,6 @@ class BaseController extends AbstractController
        return $this->json( ['isLogin'=> "Error" ] );
      }
 
-     protected function get_products(int $id=0 ):array {
-       $products = null;
-       if( $id > 0 ){
-           $products =   $this->getDoctrine()->getRepository(Product::class)->find( $id ) ;
-       } else {
-           $products =   $this->getDoctrine()->getRepository(Product::class)->findAll();
-       }
-       if( count( $products ) > 1 ){
-           return array_map(function( $product ){
-             return  $product->serializeProduct();
-           }, $products );
-       } elseif( $products ){
-         return $products->serializeProduct();
-       }
-       return $products;
-     }
+
 
 }
