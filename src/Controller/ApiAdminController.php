@@ -16,15 +16,23 @@ use App\Helper\ProductHelper;
 
 class ApiAdminController extends BaseController
 {
-    private $login_error_msg = [' User Admin '=>'Oops Login Error' ];
+    private $login_error_msg = ['User Admin'=>'Oops Login Error' ];
+
+    private $productHelper;
+
+    public function __construct(ProductHelper $productHelper )
+    {
+        $this->productHelper = $productHelper;
+    }
+
     /**
      * @Route("/api/admin/products/{username}/{password}", name="view_all_products")
      */
-    public function show_products( $username, $password, ProductHelper $ph )
+    public function show_products( $username, $password )
     {
       // ToDO display all products to Admin with credentials
        if( $this->islogin( $username, $password ) && $this->isAdmin() ){
-            return $this->json( ['Content'=>$ph->get_products() ] );
+            return $this->json( ['Content'=>$this->productHelper->get_products() ] );
        }
        return $this->json( $this->login_error_msg );
 
@@ -33,11 +41,11 @@ class ApiAdminController extends BaseController
     /**
      * @Route("/api/admin/product/{id}/{username}/{password}", name="view_single_product")
      */
-    public function show_product( $id, $username, $password, ProductHelper $ph )
+    public function show_product( $id, $username, $password )
     {
       // ToDO display one products to Admin with credentials
        if( $this->islogin( $username, $password ) && $this->isAdmin() ){
-            return $this->json( ['Content'=>$ph->get_products( $id ) ] );
+            return $this->json( ['Content'=>$this->productHelper->get_products( $id ) ] );
        }
        return $this->json( $this->login_error_msg );
 
@@ -46,19 +54,19 @@ class ApiAdminController extends BaseController
     /**
      * @Route("/api/admin/product/create", name="create_update_product")
      */
-    public function create_update_product( Request $request, ProductHelper $ph )
+    public function create_update_product( Request $request )
     {
       $auth = $request->request->get('auth');
       $data = $request->request->get('data');
       $resmsg = [];
-      
+
       if( $this->islogin( $auth[0], $auth[1] ) && $this->isAdmin() ){
-          $get_product = $ph->get_product( @$data['id'] );
+          $get_product = $this->productHelper->get_product( @$data['id'] );
           $product= $get_product['product'];
 
           if( $product ){
             $product->setProduct( $data );
-            $ph->save( $product );
+            $this->productHelper->save( $product );
             $resmsg = array_merge( $get_product['msg'], ['ProductId'=>$product->getId()] );
           }
 
